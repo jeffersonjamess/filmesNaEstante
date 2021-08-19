@@ -1,0 +1,137 @@
+/*-- PRINCIPAL ---------------------*/
+
+.row{
+	margin-left: 0;
+	margin-right: 0;
+}
+
+/*-- VITRINE DE FILMES ---------------------*/
+.filmeEmDestaque .card:hover{
+	background-color: #eee;
+}
+
+/*-- FIM DA VITRINE DE FILMES ---------------------*/
+
+
+/*-- BANNER DOS DIRETORES ---------------------*/
+#bannerDiretores{
+	max-width: 800px;
+}
+#bannerDiretores li{
+	background-color: black;
+}
+
+/*-- FIM DO BANNER DOS DIRETORES ---------------------*/
+
+
+/*-- INÍCIO DOS ATORES POPULARES ---------------------*/
+
+/*-- FIM DOS ATORES POPULARES ---------------------*/
+
+
+/*-- FIM DO PRINCIPAL ---------------------*/
+
+/* RODAPÉ */
+
+.redesSociais{
+	font-size: 80px;
+}
+.redesSociais a{
+	color: black;
+}
+.redesSociais a:hover{
+	color: red;
+}
+
+.faleConosco p{
+	font-size: 18px;
+}
+.faleConosco a{
+	font-size: 18px;
+}
+/* FIM DO RODAPÉ */
+
+
+
+/* -----------------------  ADMINISTRACAO  ------------------------- */
+
+.administracao{
+	background-color: black;
+}
+
+.administracao main{
+	background-color: white;
+	min-height: 600px;
+}
+.opcoes{
+	border: 5px groove transparent;
+}
+.opcoes i{
+	font-size: 60px;
+	width: 100%;
+}
+.opcoes p{
+	font-size: 24px;
+}
+.opcoes a{
+	text-decoration: none;
+
+}
+.opcoes a:hover{
+	color: red;
+}
+.opcoes:hover{
+	border: 5px inset lightgray;
+	border-radius: 10px;
+	background-color: #fafafa;
+}
+
+/* ---------  MENU LATERAL ADM  ------------- */
+
+.menuAdm{
+	width: 100%;
+	text-align: right;
+	background-color: black;
+	padding: 0;
+}
+.menuAdm a{
+	text-decoration: none;
+	font-size: 20px;
+	color: white;
+	width: 100%;
+}
+.menuAdm li{
+	list-style: none;
+	padding: 12px;
+	padding-right: 25px;
+	border-bottom: 2px solid gray;
+}
+.menuAdm li:hover{
+	border-bottom: 2px solid red;
+	background-color: #333;
+}
+.menuAdm li a{
+	display: block;
+}
+.menuAdm li a:hover{
+	color: orange;
+}
+.menuAdm i{
+	padding-left: 20px;
+	font-size: 24px;
+}
+
+/* ---------  FIM DO MENU LATERAL ADM  ------------- */
+
+/*  ---------------- ITENS -------------------- */
+.itensCadastrados{
+	border: 2px solid lightgray;
+	border-radius: 10px;
+	padding: 15px;
+}
+.itensCadastrados:hover{
+	background: #ededed;
+}
+
+
+/* -----------------------  FIM DA ADMINISTRACAO  ------------------------- */
