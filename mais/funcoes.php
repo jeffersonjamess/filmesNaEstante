@@ -23,20 +23,20 @@ function enviaImagem($imagem, $caminho, $imagemTemp){
 
 
 //FUNÇÃO PARA EXECUTAR AS QUERYs E RETORNAR AS MENSAGENS DE SAÍDA
-function executaQuery($sql, $paginaDeRetorno ){
+function executaQuery($sql, $paginaDeRetorno){
 	include "conexao.php";
 	if ($res = mysqli_query($con, $sql)) {
 		$reg=mysqli_fetch_assoc($res);
 		$saida = $reg['saida'];
 		$rotulo = $reg['saida_rotulo'];
 		switch ($rotulo) {
-			case 'Tudo certo!':
+			case "Tudo certo!":
 				$alert = 'alert-success';
 				break;
-			case 'OPS!':
+			case "OPS!":
 				$alert = 'alert-warning';
 				break;
-			case 'ERRO!':
+			case "ERRO!":
 				$alert = 'alert-danger';
 				break;
 		}
@@ -54,4 +54,43 @@ function executaQuery($sql, $paginaDeRetorno ){
 	if(isset($con)){ mysqli_close($con); }
 }
 
+
+//FUNÇÃO PARA EXLCUIR TODAS AS IMAGENS DE UM ATOR/DIRETOR/FILME/BANNER
+function excluiImagens($codigo, $alvo){
+	include "conexao.php";
+
+	//$imagens = array();
+	$linhas = 0;
+	$where = $alvo."_codigo";
+
+	//SELECT * FROM imagens WHERE atores_codigo = 3
+	$sql = "SELECT * FROM imagens WHERE ".$where." = $codigo";
+	if ($res = mysqli_query($con,$sql)) {
+		$linhas = mysqli_affected_rows($con);
+		if ($linhas > 0) {
+			while ($reg = mysqli_fetch_assoc($res)) {
+				
+				$delete = unlink("../imagens/".$alvo."/".$reg["caminho"]);
+				if (!$delete) {
+					?>
+					<div class="alert danger" role="alert">
+						<h3>Erro!</h3>
+						<p>Algo deu errado ao excluir a imagem: <?php $reg["caminho"]; ?></p>
+						<br>
+					</div>
+					<?php
+				}
+			}
+		}
+	}else{ ?>
+
+		<div class="alert danger" role="alert">
+			<h3>Erro!</h3>
+			<p>Algo deu errado executar a query!</p>
+			<br>
+		</div>
+		<?php
+	}
+	if(isset($con)){ mysqli_close($con); }
+}
 ?>

@@ -147,7 +147,7 @@ if (!isset($_SESSION)) {
 							<h3>Atores/Atrizes Cadastrados(as):</h3><br>
 							<div class=row>
 								<?php
-									$sql = "SELECT * FROM vw_retorna_atores";
+									$sql = "SELECT * FROM vw_retorna_atores order by nome_ator desc";
 									if ($res=mysqli_query($con,$sql)) {
 										
 										$nomeAtor = array();
