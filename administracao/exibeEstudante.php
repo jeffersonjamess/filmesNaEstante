@@ -56,145 +56,59 @@ if (!isset($_SESSION)) {
 				<div class="col-md-9 col-sm-9">
 
 					<?php
-						/* VERIFICA SE FOI ENVIADO UM ESTUDANTE PARA CADASTRADO, */
-						/* CASO NÃO TENHA SIDO, IRÁ MOSTRAR O FORMULÁRIO PARA CADASTRO */
-						if (isset($_POST['btnSubmitEstudante'])) {
+						if (isset($_GET["exibeEstudante"])) {
 
 							$estudante = new Students();
+							$id = $_GET["exibeEstudante"];
 
-							/* PEQUENA FUNÇÃO PARA GERA UM ID */
-							$idTemp = json_decode($estudante->getID());
-							foreach ($idTemp as $saida) {
-								$id = $saida->id;
+							$exibe = json_decode($estudante->getEstudante($id));
+							foreach ($exibe as $saida) {
+								$nomeEstudante = $saida->name;
+								$email = $saida->email;
+								$telefone = $saida->phone;
+								$cursoEstudante = $saida->course;
+								$status = $saida->status;
+								$criadoEm = date_create($saida->created_at);
+								$atualizadoEm = date_create($saida->updated_at);
 							}
-							if (is_null($id)) {
-								$id = 1;
-							}else{
-								$id++;
+							if ($status == "A") {
+								$status = "ATIVO";
+							}else{ $status = "INATIVO"; }
+
+							$curso = new Courses();
+							$temp = json_decode($curso->getCurso($cursoEstudante));
+							foreach ($temp as $saida) {
+								$nomeCurso = $saida->nameCourse;
 							}
+						?>
 
-							$nome = $_POST['txtNome'];
-							$email = $_POST['txtEmail'];
-							$telefone = $_POST['txtTelefone'];
-							$cursoEscolhido = $_POST['selCurso'];
-							$ativo = $_POST['selAtivo'];
+						<h1 class="text-center">Cadastro do(a) estudante: <?php echo $nomeEstudante; ?></h1>
+						<br>
+						<h4>E-mail: <strong><?php echo $email; ?></strong></h4>
+						<h4>Telefone: <strong><?php echo $telefone; ?></strong></h4>
+						<h4>Atualmente o cadastro de <?php echo $nomeEstudante; ?> está <strong><?php echo $status; ?></strong></h4>
+						<h4><?php echo $nomeEstudante; ?> está matriculado(a) no curso: <a href="exibeCurso.php?exibeCurso=<?php echo $cursoEstudante; ?>"><strong><?php echo $nomeCurso ?></strong></a></h4>
 
-							$senha = "123"; /* SENHA PADRÃO PARA NOVOS ESTUDANTES */
-							$senha = md5($senha); /* CODIFICANDO A SENHA PADRÃO */
+						<h4>O cadastro do(a) estudante foi realizado em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
+						<h4>Foi atualizado pela última vez em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
 
-							$created_at = date_format(new DateTime(), 'Y-m-d H:i:s');
-							$updated_at = date_format(new DateTime(), 'Y-m-d H:i:s');
-							
-							$dados = [
-								"id" => $id,
-								"name" => $nome,
-								"email" => $email,
-								"password" => $senha,
-								"phone" => $telefone,
-								"status" => $ativo,
-								"created_at" => $created_at,
-								"updated_at" => $updated_at,
-								"course" => $cursoEscolhido
-							];
-
-							$dados = json_encode($dados);
-
-							$cadastraAluno = $estudante->cadastrarAluno($dados);
+						<br>
+						<a href="editaEstudante.php?editaEstudante=<?php echo $id; ?>" class="btn btn-primary btn-lg btn-block">Editar</a>
+						<a href="editaEstudante.php?excluiEstudante=<?php echo $id; ?>" class="btn btn-danger btn-lg btn-block" onclick="return confirm('Tem certeza que deseja excluir este(a) estudante?')">Excluir</a>
+						<br>
+						<br>
+						<?php
 						}else{
-					?>
-
-					<ul class="nav nav-tabs" role="tablist">
-						<li class="nav-item" role="presentation">
-							<!-- ABA PARA CADASTRO DE NOVO ESTUDANTE -->
-							<a href="#tabFormulario" class="nav-link active" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario"><h3>Cadastro</h3></a>
-						</li>
-
-						<li class="nav-item" role="presentation">
-							<!-- ABA DE EXIBIÇÃO ESTUDANTES CADASTRADOS -->
-							<a href="#tabExibicao" class="nav-link" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao"><h3>Estudantes Cadastrados</h3></a>
-						</li>
-					</ul>
-
-					<div class="tab-content" id="meusConteudos">
-						<div class="tab-pane fade show active" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
-							<br>
-							<h3>Cadastrar Novo Estudante:</h3>
-							<form name="fmStudents" method="post" action="estudantes.php" onsubmit="return validaCampos()">
-								<label>Nome:</label><br>
-								<input type="text" name="txtNome" class="form-control" maxlength="100">
-
-								<br>
-								<label>E-mail:</label>
-								<input type="email" name="txtEmail" placeholder="Digite um e-mail" maxlength="80" class="form-control" aria-describedby="emailHelp"/>
-
-								<br>
-								<label>Telefone:</label>
-								<input type="text" name="txtTelefone" id="telefone" placeholder="Digite um número de telefone" maxlength="15" class="form-control" />
-
-								<br>
-								<label>Ativo ou Inativo?</label>
-								<select name="selAtivo" class="form-control">
-									<option value="I">Inativo</option>
-									<option value="A">Ativo</option>
-								</select>
-
-
-								<br>
-								<label>Curso:</label>
-								<select name="selCurso" class="form-control">
-									<option value="0">Selecione um curso</option>
-									<?php
-										$curso = new Courses();
-										$todosCursos;
-										$todosCursos = json_decode($curso->listarCursos());
-										foreach ($todosCursos as $saida) {
-											$id = $saida->id;
-											$nomeCurso = $saida->nameCourse;
-									?>
-										<option value="<?php echo $id; ?>"><?php echo $nomeCurso; ?></option>
-									<?php
-										}
-									?>
-								</select>
+							?>
+							<div class="alert alert-warning" role="alert">
+								<h3>Ops!</h3>
+								<h4>Aluno não encontrado.</h4>
 								<br><br>
-
-								<button type="submit" name="btnSubmitEstudante" class="btn btn-primary w-100">Cadastrar</button>
-							</form>
-							<br>
-
-						</div>
-						<div class="tab-pane fade" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
-							<br>
-							<h3>Estudantes Cadastrados:</h3><br>
-							<div class=row>
-								<?php
-									/* EXIBINDO CURSOS CADASTRADOS */
-									$estudante = new Students();
-
-									$todosEstudantes = json_decode($estudante->listarEstudantes());
-									foreach ($todosEstudantes as $saida) {
-										$id = $saida->id;
-										$nomeEstudante = $saida->name;
-									?>
-									<div class="col-md-6 itensCadastrados text-center">
-										<h4><?php echo $nomeEstudante; ?></h4>
-										<div class="btn-group btn-group-lg" role="group" arial-label="Basic sample">
-											<a href="exibeEstudante.php?exibeEstudante=<?php echo $id; ?>" class="btn btn-success">Ver</a>
-											<a href="editaEstudante.php?editaEstudante=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
-											<a href="editaEstudante.php?excluiEstudante=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este(a) estudante?')">Excluir</a>
-										</div>
-									</div>
-								<?php
-									}
-								?>
+								<a href='estudantes.php' class="alert-link" target='_self'>Voltar</a>
 							</div>
-
-						</div>
-					</div>
-					<br>
-					<?php
-					}
-					?>
+							<?php
+							}
+						?>
 				</div>
 			</div>
 		</main>

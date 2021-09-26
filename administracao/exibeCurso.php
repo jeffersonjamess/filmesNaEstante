@@ -15,36 +15,6 @@ if (!isset($_SESSION)) {
 		include "../Model/Students.php";
 	?>
 	<title>Cadastro de Cursos</title>
-	<script type="text/javascript">
-		function validaCampos(){
-			if (document.fmCursos.txtNome.value == "") {
-				alert("Por favor, preencha um nome!");
-				document.fmCursos.txtNome.focus();
-				return false;
-			}
-			if (document.fmCursos.txtDescricao.value == "") {
-				alert("Por favor, preencha uma descrição!");
-				document.fmCursos.txtDescricao.focus();
-				return false;
-			}
-			if (document.fmCursos.dtInicioCurso.value > document.fmCursos.dtFimCurso.value) {
-				alert("A data de Início não pode ser posterior ao fim do curso!");
-				document.fmCursos.dtInicioCurso.focus();
-				return false;
-			}
-			if (document.fmCursos.dtInicioCurso.value == "") {
-				alert("Por favor, selecione uma data para o ínicio do curso.");
-				document.fmCursos.dtInicioCurso.focus();
-				return false;
-			}
-
-			if (document.fmCursos.dtFimCurso.value == "") {
-				alert("Por favor, selecione uma data para o fim do curso.");
-				document.fmCursos.dtFimCurso.focus();
-				return false;
-			}
-		}
-	</script>
 </head>
 <body class="administracao">
 
@@ -108,8 +78,8 @@ if (!isset($_SESSION)) {
 									<h4>Descrição do curso:</h4>
 									<p><?php echo $descricao; ?></p>
 									<h4>Atualmente o curso está <strong><?php echo $status; ?></strong></h4>
-									<h4>Início do curso: <strong><?php echo date_format($dataInicio, "d/m/Y") ?></strong></h4>
-									<h4>Término do curso: <strong><?php echo date_format($dataFim, "d/m/Y") ?></strong></h4>
+									<h4>Início do curso: <strong><?php echo date_format($dataInicio, "d/m/Y"); ?></strong></h4>
+									<h4>Término do curso: <strong><?php echo date_format($dataFim, "d/m/Y"); ?></strong></h4>
 
 									<h4>O Cadastro do curso foi realizado em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
 									<h4>Foi Atualizado pela última vez em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
