@@ -115,8 +115,8 @@ if (!isset($_SESSION)) {
 								<br>
 								<label>Ativo ou Inativo?</label><br>
 								<select name="selAtivo" class="form-control">
-									<option value="I" <?php if($ativo == "I"){ echo "selected"; } ?> >Inativo</option>
 									<option value="A" <?php if($ativo == "A"){ echo "selected"; } ?> >Ativo</option>
+									<option value="I" <?php if($ativo == "I"){ echo "selected"; } ?> >Inativo</option>
 								</select>
 								
 								<br>
@@ -138,7 +138,7 @@ if (!isset($_SESSION)) {
 							
 							$inicioCurso = date_format($inicioCurso, "Y-m-d H:i:s");
 							$fimCurso = date_format($fimCurso, "Y-m-d H:i:s"); 
-							$updated_at = date_format(new DateTime(), "Y-m-d H:i:s");
+							$updated_at = date_format(new DateTime('America/Sao_Paulo'), "Y-m-d H:i:s");
 
 							$dados = [
 								"id" => $id,
@@ -158,6 +158,7 @@ if (!isset($_SESSION)) {
 			</div>
 		</main>
 	<script type="text/javascript" src="../js/mascara.js"></script>
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}else{ ?>

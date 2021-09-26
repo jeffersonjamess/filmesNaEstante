@@ -16,25 +16,6 @@ if (!isset($_SESSION)) {
 
 	?>
 	<title>Cadastro de Estudantes</title>
-	<script type="text/javascript">
-		function validaCampos(){
-			if (document.fmStudents.txtNome.value == "") {
-				alert("Por favor, preencha um nome!");
-				document.fmStudents.txtNome.focus();
-				return false;
-			}
-			if (document.fmStudents.txtEmail.value == "") {
-				alert("Por favor, preencha um e-mail!");
-				document.fmStudents.txtEmail.focus();
-				return false;
-			}
-			if (document.fmStudents.selCurso.value == 0) {
-				alert("Por favor, escolha um curso!");
-				document.fmStudents.selCurso.focus();
-				return false;
-			}
-		}
-	</script>
 </head>
 <body class="administracao">
 
@@ -62,6 +43,7 @@ if (!isset($_SESSION)) {
 							$id = $_GET["exibeEstudante"];
 
 							$exibe = json_decode($estudante->getEstudante($id));
+							
 							foreach ($exibe as $saida) {
 								$nomeEstudante = $saida->name;
 								$email = $saida->email;
@@ -90,7 +72,7 @@ if (!isset($_SESSION)) {
 						<h4><?php echo $nomeEstudante; ?> está matriculado(a) no curso: <a href="exibeCurso.php?exibeCurso=<?php echo $cursoEstudante; ?>"><strong><?php echo $nomeCurso ?></strong></a></h4>
 
 						<h4>O cadastro do(a) estudante foi realizado em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
-						<h4>Foi atualizado pela última vez em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
+						<h4>Foi atualizado pela última vez em: <strong><?php echo date_format($atualizadoEm, "d/m/Y H:i:s") ?></strong></h4>
 
 						<br>
 						<a href="editaEstudante.php?editaEstudante=<?php echo $id; ?>" class="btn btn-primary btn-lg btn-block">Editar</a>
@@ -113,6 +95,7 @@ if (!isset($_SESSION)) {
 			</div>
 		</main>
 	<script type="text/javascript" src="../js/mascara.js"></script>
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}else{ ?>

@@ -62,6 +62,7 @@ if (!isset($_SESSION)) {
 
 							$estudante = new Students();
 
+
 							/* PEQUENA FUNÇÃO PARA GERA UM ID */
 							$idTemp = json_decode($estudante->getID());
 							foreach ($idTemp as $saida) {
@@ -82,8 +83,8 @@ if (!isset($_SESSION)) {
 							$senha = "123"; /* SENHA PADRÃO PARA NOVOS ESTUDANTES */
 							$senha = md5($senha); /* CODIFICANDO A SENHA PADRÃO */
 
-							$created_at = date_format(new DateTime(), 'Y-m-d H:i:s');
-							$updated_at = date_format(new DateTime(), 'Y-m-d H:i:s');
+							$created_at = date_format(new DateTime('America/Sao_Paulo'), 'Y-m-d H:i:s');
+							$updated_at = date_format(new DateTime('America/Sao_Paulo'), 'Y-m-d H:i:s');
 							
 							$dados = [
 								"id" => $id,
@@ -105,18 +106,48 @@ if (!isset($_SESSION)) {
 
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item" role="presentation">
-							<!-- ABA PARA CADASTRO DE NOVO ESTUDANTE -->
-							<a href="#tabFormulario" class="nav-link active" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario"><h3>Cadastro</h3></a>
-						</li>
-
-						<li class="nav-item" role="presentation">
 							<!-- ABA DE EXIBIÇÃO ESTUDANTES CADASTRADOS -->
-							<a href="#tabExibicao" class="nav-link" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao"><h3>Estudantes Cadastrados</h3></a>
+							<a href="#tabExibicao" class="nav-link active" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao"><h3>Estudantes Cadastrados</h3></a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<!-- ABA PARA CADASTRO DE NOVO ESTUDANTE -->
+							<a href="#tabFormulario" class="nav-link" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario"><h3>Cadastrar</h3></a>
 						</li>
 					</ul>
 
 					<div class="tab-content" id="meusConteudos">
-						<div class="tab-pane fade show active" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
+
+						<!-- ABA DE EXIBIÇÃO DOS ESTUDANTES CADASTRADOS -->
+						<div class="tab-pane fade show active" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
+							<br>
+							<div class=row>
+								<?php
+									/* EXIBINDO CURSOS CADASTRADOS */
+									$estudante = new Students();
+
+									$todosEstudantes = json_decode($estudante->listarEstudantes());
+									foreach ($todosEstudantes as $saida) {
+										$id = $saida->id;
+										$nomeEstudante = $saida->name;
+									?>
+									<div class="col-md-6 itensCadastrados text-center">
+										<h4><?php echo $nomeEstudante; ?></h4>
+										<div class="btn-group btn-group-lg" role="group" arial-label="Basic sample">
+											<a href="exibeEstudante.php?exibeEstudante=<?php echo $id; ?>" class="btn btn-success">Ver</a>
+											<a href="editaEstudante.php?editaEstudante=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
+											<a href="editaEstudante.php?excluiEstudante=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este(a) estudante?')">Excluir</a>
+										</div>
+									</div>
+								<?php
+									}
+								?>
+							</div>
+
+						</div>
+
+
+						<!-- ABA DE EXIBIÇÃO DO FORMULÁRIO PARA CADASTRO DE NOVO ESTUDANTE -->
+						<div class="tab-pane fade" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
 							<br>
 							<h3>Cadastrar Novo Estudante:</h3>
 							<form name="fmStudents" method="post" action="estudantes.php" onsubmit="return validaCampos()">
@@ -134,8 +165,8 @@ if (!isset($_SESSION)) {
 								<br>
 								<label>Ativo ou Inativo?</label>
 								<select name="selAtivo" class="form-control">
-									<option value="I">Inativo</option>
 									<option value="A">Ativo</option>
+									<option value="I">Inativo</option>									
 								</select>
 
 
@@ -163,33 +194,7 @@ if (!isset($_SESSION)) {
 							<br>
 
 						</div>
-						<div class="tab-pane fade" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
-							<br>
-							<h3>Estudantes Cadastrados:</h3><br>
-							<div class=row>
-								<?php
-									/* EXIBINDO CURSOS CADASTRADOS */
-									$estudante = new Students();
 
-									$todosEstudantes = json_decode($estudante->listarEstudantes());
-									foreach ($todosEstudantes as $saida) {
-										$id = $saida->id;
-										$nomeEstudante = $saida->name;
-									?>
-									<div class="col-md-6 itensCadastrados text-center">
-										<h4><?php echo $nomeEstudante; ?></h4>
-										<div class="btn-group btn-group-lg" role="group" arial-label="Basic sample">
-											<a href="exibeEstudante.php?exibeEstudante=<?php echo $id; ?>" class="btn btn-success">Ver</a>
-											<a href="editaEstudante.php?editaEstudante=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
-											<a href="editaEstudante.php?excluiEstudante=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este(a) estudante?')">Excluir</a>
-										</div>
-									</div>
-								<?php
-									}
-								?>
-							</div>
-
-						</div>
 					</div>
 					<br>
 					<?php
@@ -199,6 +204,7 @@ if (!isset($_SESSION)) {
 			</div>
 		</main>
 	<script type="text/javascript" src="../js/mascara.js"></script>
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}else{ ?>

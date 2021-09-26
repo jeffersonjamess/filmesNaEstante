@@ -91,8 +91,8 @@ if (!isset($_SESSION)) {
 							
 							$inicioCurso = date_format($inicioCurso, "Y-m-d H:i:s");
 							$fimCurso = date_format($fimCurso, "Y-m-d H:i:s"); 
-							$created_at = date_format(new DateTime(), "Y-m-d H:i:s");
-							$updated_at = date_format(new DateTime(), "Y-m-d H:i:s");
+							$created_at = date_format(new DateTime('America/Sao_Paulo'), "Y-m-d H:i:s");
+							$updated_at = date_format(new DateTime('America/Sao_Paulo'), "Y-m-d H:i:s");
 
 							$dados = [
 								"id" => $id,
@@ -116,86 +116,89 @@ if (!isset($_SESSION)) {
 
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item" role="presentation">
-							<!-- ABA PARA CADASTRO DE NOVO CURSO -->
-							<a href="#tabFormulario" class="nav-link active" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario"><h3>Cadastro</h3></a>
+							<!-- ABA PARA EXIBIÇÃO DOS CURSOS JÁ CADASTRADOS -->
+							<a href="#tabExibicao" class="nav-link active" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao"><h3>Cursos Cadastrados</h3></a>
 						</li>
 						<li class="nav-item" role="presentation">
-							<!-- ABA PARA EXIBIÇÃO DOS CURSOS JÁ CADASTRADOS -->
-							<a href="#tabExibicao" class="nav-link" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao"><h3>Cursos Cadastrados</h3></a>
+							<!-- ABA PARA CADASTRO DE NOVO CURSO -->
+							<a href="#tabFormulario" class="nav-link" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario"><h3>Cadastrar</h3></a>
 						</li>
+						
 					</ul>
 
-					<!-- ABA PARA CADASTRO DE NOVO CURSO -->
+					
 					<div class="tab-content" id="meusConteudos">
-						<div class="tab-pane fade show active" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
-							<br>
-							<h3>Cadastrar Novo Curso:</h3>
-							<form name="fmCursos" method="get" action="cursos.php" onsubmit="return validaCampos()">
-								<label>Nome:</label><br>
-								<input type="text" name="txtNome" class="form-control" maxlength="70">
-								
-								<div class="row">
-									<div class="col-md-6">
-										<br>
-										<label for="festa">Data de início do curso:</label><br>
-		    							<input type="date" name="dtInicioCurso" class="form-control" min="2022-02-01" max="2025-10-01">
-	    							</div>
 
-	    							<div class="col-md-6">
-										<br>
-										<label for="festa">Data de encerramento do curso:</label><br>
-		    							<input type="date" name="dtFimCurso" class="form-control" min="2022-02-02" max="2026-02-01">
-	    							</div>
 
-								</div>
+							<!-- ABA PARA EXIBIÇÃO DOS CURSOS JÁ CADASTRADOS -->
+							<div class="tab-pane fade show active" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
 								<br>
-								<label>Descrição do curso:</label><br>
-								<textarea name="txtDescricao" maxlength="2000" placeholder="Pequena descrição do curso..." class="form-control"></textarea>
-
-								<br>
-								<label>Ativo ou Inativo?</label><br>
-								<select name="selAtivo" class="form-control">
-									<option value="I">Inativo</option>
-									<option value="A">Ativo</option>
-								</select>
-								
-								<br>
-
-								<button type="submit" name="btnSubmitCursos" class="btn btn-primary w-100">Cadastrar</button>
-								<br><br>
-							</form>
-
-						</div>
-
-						<!-- ABA PARA EXIBIÇÃO DOS CURSOS JÁ CADASTRADOS -->
-						<div class="tab-pane fade" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
-							<br>
-							<h3>Cursos Cadastrados:</h3><br>
-							<div class=row>
-								<?php
-									/* EXIBINDO CURSOS CADASTRADOS */
-									$curso = new Courses();
-
-									$todosCursos = json_decode($curso->listarCursos());
-									foreach ($todosCursos as $saida) {
-										$id = $saida->id;
-										$nomeCurso = $saida->nameCourse;
-									?>
-									<div class="col-md-6 itensCadastrados text-center">
-										<h4><?php echo $nomeCurso; ?></h4>
-										<div class="btn-group btn-group-lg" role="group" arial-label="Basic sample">
-											<a href="exibeCurso.php?exibeCurso=<?php echo $id; ?>" class="btn btn-success">Ver</a>
-											<a href="editaCurso.php?editaCurso=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
-											<a href="editaCurso.php?excluirCurso=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este curso?')">Excluir</a>
-										</div>
-									</div>
+								<div class=row>
 									<?php
-									}
+										/* EXIBINDO CURSOS CADASTRADOS */
+										$curso = new Courses();
 
-									?>
+										$todosCursos = json_decode($curso->listarCursos());
+										foreach ($todosCursos as $saida) {
+											$id = $saida->id;
+											$nomeCurso = $saida->nameCourse;
+										?>
+										<div class="col-md-6 itensCadastrados text-center">
+											<h4><?php echo $nomeCurso; ?></h4>
+											<div class="btn-group btn-group-lg" role="group" arial-label="Basic sample">
+												<a href="exibeCurso.php?exibeCurso=<?php echo $id; ?>" class="btn btn-success">Ver</a>
+												<a href="editaCurso.php?editaCurso=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
+												<a href="editaCurso.php?excluirCurso=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este curso?')">Excluir</a>
+											</div>
+										</div>
+										<?php
+										}
+
+										?>
+								</div>
+
 							</div>
 
-						</div>
+
+							<!-- ABA PARA CADASTRO DE NOVO CURSO -->
+							<div class="tab-pane fade" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
+								<br>
+								<h3>Cadastrar Novo Curso:</h3>
+								<form name="fmCursos" method="get" action="cursos.php" onsubmit="return validaCampos()">
+									<label>Nome:</label><br>
+									<input type="text" name="txtNome" class="form-control" maxlength="70">
+									
+									<div class="row">
+										<div class="col-md-6">
+											<br>
+											<label for="festa">Data de início do curso:</label><br>
+			    							<input type="date" name="dtInicioCurso" class="form-control" min="2022-02-01" max="2025-10-01">
+		    							</div>
+
+		    							<div class="col-md-6">
+											<br>
+											<label for="festa">Data de encerramento do curso:</label><br>
+			    							<input type="date" name="dtFimCurso" class="form-control" min="2022-02-02" max="2026-02-01">
+		    							</div>
+
+									</div>
+									<br>
+									<label>Descrição do curso:</label><br>
+									<textarea name="txtDescricao" maxlength="2000" placeholder="Pequena descrição do curso..." class="form-control"></textarea>
+
+									<br>
+									<label>Ativo ou Inativo?</label><br>
+									<select name="selAtivo" class="form-control">
+										<option value="A">Ativo</option>
+										<option value="I">Inativo</option>
+									</select>
+									
+									<br>
+
+									<button type="submit" name="btnSubmitCursos" class="btn btn-primary w-100">Cadastrar</button>
+									<br><br>
+								</form>
+							</div>
 					</div>
 					<br>
 					<?php
@@ -205,6 +208,7 @@ if (!isset($_SESSION)) {
 			</div>
 		</main>
 	<!-- FIM DO PRINCIPAL --------------------->
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}else{ ?>

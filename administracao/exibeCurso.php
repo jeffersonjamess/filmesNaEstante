@@ -82,7 +82,7 @@ if (!isset($_SESSION)) {
 									<h4>Término do curso: <strong><?php echo date_format($dataFim, "d/m/Y"); ?></strong></h4>
 
 									<h4>O Cadastro do curso foi realizado em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
-									<h4>Foi Atualizado pela última vez em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
+									<h4>Foi Atualizado pela última vez em: <strong><?php echo date_format($atualizadoEm, "d/m/Y H:i:s") ?></strong></h4>
 
 									<br><br>
 									<a href="editaCurso.php?editaCurso=<?php echo $id; ?>" class="btn btn-primary btn-lg btn-block">Editar</a>
@@ -135,6 +135,7 @@ if (!isset($_SESSION)) {
 			</div>
 		</main>
 	<!-- FIM DO PRINCIPAL --------------------->
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}else{ ?>

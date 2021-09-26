@@ -10,7 +10,7 @@
 			<br>
 			<h3>Você será redirecionado.</h3>
 		</center>
-		<meta http-equiv="refresh" content=2;url="estudantes.php">
+		<meta http-equiv="refresh" content=2;url="cursos.php">
 		<?php
 	}else{
 ?>
@@ -63,7 +63,7 @@
 									<h2 class="text-center">Login efetuado com sucesso!</h2>
 									<br>
 								</div>
-								<meta http-equiv="refresh" content=2;url="estudantes.php">
+								<meta http-equiv="refresh" content=2;url="cursos.php">
 							<?php
 							}else{ ?>
 								<div class="alert alert-danger" role="alert">
@@ -89,7 +89,7 @@
 			
 		</main>
 	<!-- FIM DO PRINCIPAL --------------------->
-
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}

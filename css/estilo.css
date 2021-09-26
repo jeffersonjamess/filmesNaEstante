@@ -5,53 +5,6 @@
 	margin-right: 0;
 }
 
-/*-- VITRINE DE FILMES ---------------------*/
-.filmeEmDestaque .card:hover{
-	background-color: #eee;
-}
-
-/*-- FIM DA VITRINE DE FILMES ---------------------*/
-
-
-/*-- BANNER DOS DIRETORES ---------------------*/
-#bannerDiretores{
-	max-width: 800px;
-}
-#bannerDiretores li{
-	background-color: black;
-}
-
-/*-- FIM DO BANNER DOS DIRETORES ---------------------*/
-
-
-/*-- INÍCIO DOS ATORES POPULARES ---------------------*/
-
-/*-- FIM DOS ATORES POPULARES ---------------------*/
-
-
-/*-- FIM DO PRINCIPAL ---------------------*/
-
-/* RODAPÉ */
-
-.redesSociais{
-	font-size: 80px;
-}
-.redesSociais a{
-	color: black;
-}
-.redesSociais a:hover{
-	color: red;
-}
-
-.faleConosco p{
-	font-size: 18px;
-}
-.faleConosco a{
-	font-size: 18px;
-}
-/* FIM DO RODAPÉ */
-
-
 
 /* -----------------------  ADMINISTRACAO  ------------------------- */
 

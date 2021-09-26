@@ -95,8 +95,8 @@ if (!isset($_SESSION)) {
 								<br>
 								<label>Ativo ou Inativo?</label>
 								<select name="selAtivo" class="form-control">
-									<option value="I" <?php if($ativo == "I"){ echo "selected"; } ?> >Inativo</option>
 									<option value="A" <?php if($ativo == "A"){ echo "selected"; } ?> >Ativo</option>
+									<option value="I" <?php if($ativo == "I"){ echo "selected"; } ?> >Inativo</option>
 								</select>
 
 
@@ -136,7 +136,7 @@ if (!isset($_SESSION)) {
 							$email = $_GET['txtEmail'];
 							$telefone = $_GET['txtTelefone'];
 							$status = $_GET['selAtivo'];
-							$atualizadoEm = date_format(new DateTime(), "Y-m-d H:i:s");
+							$atualizadoEm = date_format(new DateTime('America/Sao_Paulo'), "Y-m-d H:i:s");
 							$cursoEstudante = $_GET['selCurso'];
 
 							$dados = [
@@ -151,12 +151,20 @@ if (!isset($_SESSION)) {
 							$dados = json_encode($dados);
 
 							$editaEstudante = $estudante->editarEstudante($dados);
+						}else{ ?>
+							<div class="alert alert-success" role="alert">
+								<h3>Nenhum aluno encontrado!</h3>
+								<br>
+								<a href='estudantes.php' class="alert-link" target='_self'>Voltar</a>
+							</div>
+						<?php
 						}
 						?>
 				</div>
 			</div>
 		</main>
 	<script type="text/javascript" src="../js/mascara.js"></script>
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}else{ ?>

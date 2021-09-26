@@ -138,7 +138,16 @@ class Students extends Conexao{
 		);
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$contagem = $stmt->rowCount();
-		return json_encode($res);
+		if ($contagem == 0) { ?>
+			<div class="alert alert-warning" role="alert">
+				<h3>Estudante não encontrado!</h3>
+				<br>
+				<a href='estudantes.php' class="alert-link" target='_self'>Voltar</a>
+			</div>
+			<?php
+		}elseif($contagem > 0) {
+			return json_encode($res);
+		}
 	}
 
 	/* FUNÇÃO PARA EDITAR INFORMAÇÕES DE UM ESTUDANTE */
