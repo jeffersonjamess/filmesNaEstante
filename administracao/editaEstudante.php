@@ -4,17 +4,37 @@
 if (!isset($_SESSION)) {
 	session_start();
 }
-	if ($_SESSION["acesso"]==true) {
+	if ($_SESSION['acesso']==true) {
 ?>
 <head>
 	<?php
-		include "header.html";
-		include "../complementos/conexao.php";
-		include "../complementos/funcoes.php";
+		include_once "header.html";
+		include_once "../complementos/conexao.php";
+		include_once "../complementos/funcoes.php";
 		include "../Model/Courses.php";
 		include "../Model/Students.php";
+
 	?>
 	<title>Cadastro de Estudantes</title>
+	<script type="text/javascript">
+		function validaCampos(){
+			if (document.fmStudents.txtNome.value == "") {
+				alert("Por favor, preencha um nome!");
+				document.fmStudents.txtNome.focus();
+				return false;
+			}
+			if (document.fmStudents.txtEmail.value == "") {
+				alert("Por favor, preencha um e-mail!");
+				document.fmStudents.txtEmail.focus();
+				return false;
+			}
+			if (document.fmStudents.selCurso.value == 0) {
+				alert("Por favor, escolha um curso!");
+				document.fmStudents.selCurso.focus();
+				return false;
+			}
+		}
+	</script>
 </head>
 <body class="administracao">
 
@@ -28,115 +48,119 @@ if (!isset($_SESSION)) {
 	<!-- PRINCIPAL --------------------->
 		
 		<main class="container">
-			<h1 class="text-center">Cursos</h1><br>
+			<h1 class="text-center">Estudantes</h1><br>
 			<div class="row">
 				<div class="col-md-3 col-sm-3">
 					<?php include_once "menuAdm.html" ?>
 				</div>
 				<div class="col-md-9 col-sm-9">
-					
+
 					<?php
-						if (isset($_GET["exibeEstudante"])) {
+						if (isset($_GET['excluiEstudante'])) {
+							$curso = new Students();
+							$id = $_GET['excluiEstudante'];
+
+							$deletarEstudante = $curso->excluirEstudante($id);
+						}elseif(isset($_GET['editaEstudante'])) {
 
 							$estudante = new Students();
-							$id = $_GET["exibeEstudante"];
+							$id = $_GET['editaEstudante'];
+							$_SESSION['editaEstudante'] = $id;
 
-							$exibe = json_decode($curso->getEstudante($id));
+							$exibe = json_decode($estudante->getEstudante($id));
 							foreach ($exibe as $saida) {
-								$nomeCurso = $saida->nameCourse;
-								$descricao = $saida->description;
-								$status = $saida->status;
-								$dataInicio = date_create($saida->dateStart);
-								$dataFim = date_create($saida->dateFinish);
-								$criadoEm = date_create($saida->created_at);
-								$atualizadoEm = date_create($saida->updated_at);
-							}
-							if ($status == "A") {
-								$status = "ATIVO";
-							}else{ $status = "INATIVO"; }
-
-
-							?>
-							
-							<ul class="nav nav-tabs" role="tablist">
-								<li class="nav-item" role="presentation">
-									<!-- ABA PARA CADASTRO DE NOVO CURSO -->
-									<a href="#tabFormulario" class="nav-link active" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario"><h3>Cadastro</h3></a>
-								</li>
-								<li class="nav-item" role="presentation">
-									<!-- ABA PARA EXIBIÇÃO DOS CURSOS JÁ CADASTRADOS -->
-									<a href="#tabExibicao" class="nav-link" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao"><h3>Alunos desse curso</h3></a>
-								</li>
-							</ul>
-
-							<div class="tab-content" id="meusConteudos">
-								<div class="tab-pane fade show active" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
-									<h1 class="text-center"><?php echo $nomeCurso; ?></h1>
-									<br>
-									<h4>Descrição do curso:</h4>
-									<p><?php echo $descricao; ?></p>
-									<h4>Atualmente o curso está <strong><?php echo $status; ?></strong></h4>
-									<h4>Início do curso: <strong><?php echo date_format($dataInicio, "d/m/Y") ?></strong></h4>
-									<h4>Término do curso: <strong><?php echo date_format($dataFim, "d/m/Y") ?></strong></h4>
-
-									<h4>O Cadastro do curso foi realizado em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
-									<h4>Foi Atualizado pela última vez em: <strong><?php echo date_format($criadoEm, "d/m/Y H:i:s") ?></strong></h4>
-
-									<br><br>
-									<a href="editaCurso.php?editaCurso=<?php echo $id; ?>" class="btn btn-primary btn-lg btn-block">Editar</a>
-									<a href="editaCurso.php?excluirCurso=<?php echo $id; ?>" class="btn btn-danger btn-lg btn-block" onclick="return confirm('Tem certeza que deseja excluir este curso?')">Excluir</a>
-
-									<br>
-								</div>
-
-								<!-- ABA PARA EXIBIÇÃO DOS ALUNOS CADASTRADOS NESSE CURSO -->
-								<div class="tab-pane fade" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
-									<br>
-									<div class="row">
-									<?php
-									$estudantes = new Students();
-									$curso = $_GET['exibeCurso'];
-
-									$estudantesCurso = json_decode($estudantes->listarEstudantesNoCurso($curso));
-									foreach ($estudantesCurso as $saida) {
-										$id = $saida->id;
-										$nomeEstudante = $saida->name;
-									?>
-									<div class="col-md-6 itensCadastrados text-center">
-										<h4><?php echo $nomeEstudante; ?></h4>
-										<div class="btn-group btn-group-lg" role="group" arial-label="Basic sample">
-											<a href="exibeEstudante.php?exibeEstudante=<?php echo $id; ?>" class="btn btn-success">Ver</a>
-											<a href="editaEstudante.php?editaEstudante=<?php echo $id; ?>" class="btn btn-primary">Editar</a>
-											<a href="editaEstudante.php?excluiEstudante=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este(a) estudante?')">Excluir</a>
-										</div>
-									</div>
-									<?php
-									}
-									?>
-									</div>
-								</div>
-							</div>
-							
-							<?php
-						}else{
-							?>
-							<div class="alert alert-warning" role="alert">
-								<h3>Ops!</h3>
-								<h4>Curso não encontrado.</h4>
-								<br><br>
-								<a href='cursos.php' class="alert-link" target='_self'>Voltar</a>
-							</div>
-							<?php
+								$nomeEstudante = $saida->name;
+								$email = $saida->email;
+								$telefone = $saida->phone;
+								$cursoEstudante = $saida->course;
+								$ativo = $saida->status;
 						}
 					?>
+
+						<div class="tab-pane fade show active" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
+							<br>
+							<h3>Editar cadastro de Estudante:</h3>
+							<form name="fmStudents" method="get" action="editaEstudante.php" onsubmit="return validaCampos()">
+								<label>Nome:</label><br>
+								<input type="text" name="txtNome" class="form-control" maxlength="100" value="<?php echo $nomeEstudante; ?>">
+
+								<br>
+								<label>E-mail:</label>
+								<input type="email" name="txtEmail" placeholder="Digite um e-mail" maxlength="80" class="form-control" aria-describedby="emailHelp" value="<?php echo $email; ?>" />
+
+								<br>
+								<label>Telefone:</label>
+								<input type="text" name="txtTelefone" id="telefone" placeholder="Digite um número de telefone" maxlength="15" class="form-control" value="<?php echo $telefone; ?>" />
+
+								<br>
+								<label>Ativo ou Inativo?</label>
+								<select name="selAtivo" class="form-control">
+									<option value="I" <?php if($ativo == "I"){ echo "selected"; } ?> >Inativo</option>
+									<option value="A" <?php if($ativo == "A"){ echo "selected"; } ?> >Ativo</option>
+								</select>
+
+
+								<br>
+								<label>Curso:</label>
+								<select name="selCurso" class="form-control">
+									<option value="0">Selecione um curso</option>
+									<?php
+										$curso = new Courses();
+										$todosCursos;
+										$todosCursos = json_decode($curso->listarCursos());
+										foreach ($todosCursos as $saida) {
+											$idCourse = $saida->id;
+											$nomeCurso = $saida->nameCourse;
+									?>
+										<option value="<?php echo $idCourse; ?>" <?php if($idCourse == $cursoEstudante){ echo "selected"; } ?> >
+											<?php echo $nomeCurso; ?></option>
+									<?php
+										}
+									?>
+								</select>
+								<br><br>
+
+								<button type="submit" name="btnSubmitEditaEstudante" class="btn btn-success w-100">Salvar Alterações</button>
+							</form>
+							<br>
+
+						</div>
+						<br>
+						<?php
+						}elseif(isset($_GET['btnSubmitEditaEstudante'])){
+							$estudante = new Students();
+							$id = $_SESSION['editaEstudante'];
+							unset($_SESSION['editaEstudante']);
+
+							$nomeEstudante = $_GET['txtNome'];
+							$email = $_GET['txtEmail'];
+							$telefone = $_GET['txtTelefone'];
+							$status = $_GET['selAtivo'];
+							$atualizadoEm = date_format(new DateTime(), "Y-m-d H:i:s");
+							$cursoEstudante = $_GET['selCurso'];
+
+							$dados = [
+								"id" => $id,
+								"name" => $nomeEstudante,
+								"email" => $email,
+								"phone" => $telefone,
+								"status" => $status,
+								"updated_at" => $atualizadoEm,
+								"course" => $cursoEstudante
+							];
+							$dados = json_encode($dados);
+
+							$editaEstudante = $estudante->editarEstudante($dados);
+						}
+						?>
 				</div>
 			</div>
 		</main>
-	<!-- FIM DO PRINCIPAL --------------------->
+	<script type="text/javascript" src="../js/mascara.js"></script>
 </body>
 <?php
 	}else{ ?>
-		<meta http-equiv="refresh" content=0;url="login.php">
+		<meta http-equiv="refresh" content=0;url="../index.php">
 	<?php
 	}
 ?>
