@@ -8,19 +8,20 @@
 		?>
 		<center><h2>A Sessão já está aberta</h2>
 			<br>
-			<h4>Você será redirecionado para página de Administração.</h4>
+			<h3>Você será redirecionado.</h3>
 		</center>
-		<meta http-equiv="refresh" content=2;url="../adm.php">
+		<meta http-equiv="refresh" content=2;url="cursos.php">
 		<?php
 	}else{
 ?>
 <head>
 	<?php
 		include_once "header.html";
-		include_once "../mais/conexao.php";
+		include_once "../complementos/conexao.php";
 	?>
 
-	<title>Cadatro de Usuários - Filmes na Estante</title>
+
+	<title>Mapa - Back End II</title>
 	<script type="text/javascript">
 		function validaCampos(){
 			if (document.fmLogin.txtLogin.value == "") {
@@ -38,48 +39,39 @@
 </head>
 <body class="administracao">
 
-	<!-- MENU SUPERIOR --------------------->
-
-	<?php include_once "menuSuperior.html";	?>
-
-	<!-- FIM DO MENU SUPERIOR --------------------->
-
-
 	<!-- PRINCIPAL --------------------->
 		
 		<main class="container">
-			<h1 class="text-center">USUÁRIOS - Administração</h1><br>
+			<h1 class="text-center">Administração</h1><br>
 			<div class="row">
 				<div class="col-md-7 col-sm-7">
-					<img src="../imagens/login.jpg" class="w-100" alt="Imagens ilustrativa para login">
+					<img src="../imagens/login.jpg" class="img-login rounded mx-auto d-block" alt="Imagens ilustrativa para login" style="max-width: 400px">
 				</div>
 				<div class="col-md-5 col-sm-5">
 					<?php
+						define("USER", "201366435");
+						define("PASS", "jefferson");
+
 						if (isset($_POST['btnSubmitLogin'])) {
 							$usuario = $_POST['txtLogin'];
 							$senha = $_POST['txtSenha'];
-							$sql = "SELECT login, senha FROM usuarios WHERE login = '$usuario' AND senha = '$senha'";
-							if ($res=mysqli_query($con,$sql)) {
-								$linhas = mysqli_affected_rows($con);
-								if ($linhas > 0) {
-									$_SESSION['acesso']=true;
-									?>
-									<div class="alert alert-success" role="alert">
-										<h2 class="text-center">Login efetuado com sucesso!</h2>
-										<br>
-									</div>
-									<meta http-equiv="refresh" content=2;url="../adm.php">
-								<?php
-								}else{ ?>
-									<div class="alert alert-danger" role="alert">
-										<h2 class="text-center">Usuário ou senha inválido!</h2>
-										<br><br>
-										<a href='login.php' class="alert-link" target='_self'>Voltar</a>
-									</div>
-								<?php
-								}
-							}else{
-								echo "<h3>Erro ao executar a Query!</h3>";
+
+							if ($usuario == USER && $senha == PASS) {
+								$_SESSION['acesso']=true;
+							?>
+								<div class="alert alert-success" role="alert">
+									<h2 class="text-center">Login efetuado com sucesso!</h2>
+									<br>
+								</div>
+								<meta http-equiv="refresh" content=2;url="cursos.php">
+							<?php
+							}else{ ?>
+								<div class="alert alert-danger" role="alert">
+									<h2 class="text-center">Usuário ou senha inválido!</h2>
+									<br><br>
+									<a href='login.php' class="alert-link" target='_self'>Voltar</a>
+								</div>
+							<?php
 							}
 						}else{
 					?>
@@ -96,10 +88,8 @@
 			</div>
 			
 		</main>
-		<!--- ENCERRANDO A CONEXÃO COM O BANCO DE DADOS --->
-		<?php if (isset($con)) { mysqli_close($con); }  ?>
 	<!-- FIM DO PRINCIPAL --------------------->
-
+	<?php include_once "rodape.html"; ?>
 </body>
 <?php
 	}
