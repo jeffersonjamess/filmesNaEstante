@@ -90,15 +90,58 @@ if (!isset($_SESSION)) {
 
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item" role="presentation">
-							 <a href="#tabFormulario" class="nav-link active" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario">Cadastro</a>
+							 <a href="#tabExibicao" class="nav-link active" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao">Atores e Atrizes Cadastrados</a>
 						</li>
 						<li class="nav-item" role="presentation">
-							 <a href="#tabExibicao" class="nav-link" id="linkExibicao" data-toggle="tab" role="tab" aria-controls="tabExibicao">Atores e Atrizes Cadastrados</a>
+							 <a href="#tabFormulario" class="nav-link" id="linkFormulario" data-toggle="tab" role="tab" aria-controls="tabFormulario">Cadastro</a>
 						</li>
+						
 					</ul>
 
 					<div class="tab-content" id="meusConteudos">
-						<div class="tab-pane fade show active" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
+						<div class="tab-pane fade show active" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
+							<br>
+							<h3>Atores/Atrizes Cadastrados(as):</h3><br>
+							<div class=row>
+								<?php
+									$sql = "SELECT * FROM vw_retorna_atores order by nome_ator";
+									if ($res=mysqli_query($con,$sql)) {
+										
+										$nomeAtor = array();
+										$codigoAtor = array();
+										$imagemAtor = array();
+										$i = 0;
+
+										while($reg=mysqli_fetch_assoc($res)){
+											$nomeAtor[$i] = $reg['nome_ator'];
+											$codigoAtor[$i] = $reg['codigo_ator'];
+											$imagemAtor[$i] = $reg['caminho_imagem'];
+
+											if (!isset($imagemAtor[$i])) {
+												$imagemAtor[$i] = "sem_imagem.jpg";
+											}
+											?>
+											<div class="col-md-3 itensCadastrados text-center">
+												<img src="../imagens/atores/<?php echo $imagemAtor[$i]; ?>" class="img-responsive img-thumbnail">
+												<h4><?php echo $nomeAtor[$i]; ?></h4>
+												<div class="btn-group btn-group-sm" role="group" arial-label="Basic sample">
+													<a href="editaAtorAdm.php?editaAtor=<?php echo $codigoAtor[$i]; ?>" class="btn btn-primary">Editar</a>
+													<a href="editaAtorAdm.php?excluirAtor=<?php echo $codigoAtor[$i]; ?>" class="btn btn-secondary" onclick="return confirm('Tem certeza que deseja excluir este(a) Ator/atriz?')">Excluir</a>
+												</div>
+											</div>
+
+											<?php
+											$i++;
+										}
+									}else{
+										echo "Erro ao executar a query!";
+									}
+								?>
+							</div>
+
+						</div>
+
+						<div class="tab-pane fade" id="tabFormulario" role="tabpanel" aria-labelledby="linkFormulario">
 							<br>
 							<h3>Cadastrar Novo(a) ator/atriz:</h3>
 							<form name="fmAtores" method="post" action="atoresAdm.php" enctype="multipart/form-data" onsubmit="return validaCampos()">
@@ -110,7 +153,7 @@ if (!isset($_SESSION)) {
 								<select name="selPais" class="form-control">
 									<option value="0">- - - - - - - - - - -</option>
 									<?php
-										$sql = "SELECT * FROM vw_retorna_pais";
+										$sql = "SELECT * FROM vw_retorna_pais ORDER BY nome_pais";
 										if($res = mysqli_query($con,$sql)){
 											$nomePais = array();
 											$codigoPais = array();
@@ -142,47 +185,7 @@ if (!isset($_SESSION)) {
 							</form>
 
 						</div>
-						<div class="tab-pane fade" id="tabExibicao" role="tabpanel" aria-labelledby="linkExibicao">
-							<br>
-							<h3>Atores/Atrizes Cadastrados(as):</h3><br>
-							<div class=row>
-								<?php
-									$sql = "SELECT * FROM vw_retorna_atores order by nome_ator desc";
-									if ($res=mysqli_query($con,$sql)) {
-										
-										$nomeAtor = array();
-										$codigoAtor = array();
-										$imagemAtor = array();
-										$i = 0;
-
-										while($reg=mysqli_fetch_assoc($res)){
-											$nomeAtor[$i] = $reg['nome_ator'];
-											$codigoAtor[$i] = $reg['codigo_ator'];
-											$imagemAtor[$i] = $reg['caminho_imagem'];
-
-											if (!isset($imagemAtor[$i])) {
-												$imagemAtor[$i] = "sem_imagem.jpg";
-											}
-											?>
-											<div class="col-md-3 itensCadastrados text-center">
-												<img src="../imagens/atores/<?php echo $imagemAtor[$i]; ?>" class="img-responsive img-thumbnail">
-												<h4><?php echo $nomeAtor[$i]; ?></h4>
-												<div class="btn-group btn-group-sm" role="group" arial-label="Basic sample">
-													<a href="editaAtorAdm.php?editaAtor=<?php echo $codigoAtor[$i]; ?>&nomeAtor=<?php echo $nomeAtor[$i]; ?>" class="btn btn-primary">Editar</a>
-													<a href="editaAtorAdm.php?excluirAtor=<?php echo $codigoAtor[$i]; ?>" class="btn btn-secondary" onclick="return confirm('Tem certeza que deseja excluir este(a) Ator/atriz?')">Excluir</a>
-												</div>
-											</div>
-
-											<?php
-											$i++;
-										}
-									}else{
-										echo "Erro ao executar a query!";
-									}
-								?>
-							</div>
-
-						</div>
+						
 					</div>
 					<br>
 					<?php

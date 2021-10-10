@@ -25,6 +25,7 @@ function enviaImagem($imagem, $caminho, $imagemTemp){
 //FUNÇÃO PARA EXECUTAR AS QUERYs E RETORNAR AS MENSAGENS DE SAÍDA
 function executaQuery($sql, $paginaDeRetorno){
 	include "conexao.php";
+	//echo $sql;
 	if ($res = mysqli_query($con, $sql)) {
 		$reg=mysqli_fetch_assoc($res);
 		$saida = $reg['saida'];
